@@ -1,0 +1,3355 @@
+/* ===========================
+   Warm Monochrome Portfolio CSS
+   =========================== */
+
+/* ===== Theme Tokens ===== */
+:root{
+  --bg: #FAF7F2;
+  --surface: #FFFFFF;
+  --border: rgba(43,36,30,0.18);
+  --text: #2B241E;
+  --black: #1A1411;
+
+  --muted: rgba(43,36,30,0.62);
+  --line: rgba(43,36,30,0.18);
+  --soft: rgba(43,36,30,0.06);
+  --chip: rgba(43,36,30,0.08);
+
+  --font-body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-display: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --shadow: 0 22px 90px rgba(0,0,0,.12);
+}
+
+:root.dark{
+  --bg: #0F0D0B;
+  --surface: rgba(255,255,255,0.06);
+  --border: rgba(243,238,231,0.18);
+  --text: #F3EEE7;
+  --black: #F3EEE7;
+
+  --muted: rgba(243,238,231,0.62);
+  --line: rgba(243,238,231,0.18);
+  --soft: rgba(243,238,231,0.06);
+  --chip: rgba(243,238,231,0.10);
+
+  --shadow: 0 22px 90px rgba(0,0,0,.45);
+}
+
+/* ===== Base Reset ===== */
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+html,body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent the annoying horizontal scrollbar from tiny overflow (glows, transforms, 100vw elements) */
+  overflow-x: hidden;
+}
+
+/* Prefer "clip" when supported: prevents scrollbars without creating a new scrolling context */
+@supports (overflow-x: clip){
+  html,body{ overflow-x: clip; }
+}
+
+/* Smooth, premium motion defaults */
+html{ scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: no-preference){
+  /* Keep it subtle: no layout changes, just... */
+  .btn2,
+  a,
+  button{
+    transition:
+      transform .18s var(--ease),
+      opacity .18s var(--ease),
+      background-color .18s var(--ease),
+      border-color .18s var(--ease),
+      box-shadow .18s var(--ease),
+      filter .18s var(--ease);
+  }
+
+  /* Only lift "interactive controls" (avoid shifting large anchor rows) */
+  .btn2:hover,
+  .pModalLink:hover,
+  .pModalClose:hover,
+  d:hover,
+  .stackIcon:hover,
+  .miniChip:hover,
+  .theme-toggle-icon:hover{ transform: translateY(-1px); }
+
+  .btn2:active,
+  .pModalLink:active,
+  .pModalClose:active,
+  grid d:active,
+  .stackIcon:active,
+  .miniChip:active,
+  .theme-toggle-icon:active{ transform: translateY(0) scale(.985); }
+
+  /* Soft entrance for big sections */
+  .landing-inner,
+  .bento2-shell,
+  .projects-shell,
+  .skills-shell{
+    animation: softIn .55s var(--ease) both;
+  }
+}
+
+@keyframes softIn{
+  from{ opacity: 0; transform: translateY(10px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *,*::before,*::after{ animation: none !important; transition: none !important; }
+}
+
+a{ color: inherit; }
+a:focus-visible,
+button:focus-visible{
+  outline: 2px solid color-mix(in srgb, var(--text) 35%, transparent);
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+strong{ font-weight: 600; }
+
+.page{ min-height:100vh; }
+
+/* ===========================
+   Landing Poster (Home)
+   =========================== */
+
+.landing{
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 18px;
+}
+
+/* vignette */
+.landing::before{
+  content:"";
+  position:absolute; inset:-2px;
+  background:
+    radial-gradient(800px 420px at 50% 30%, var(--soft), transparent 60%),
+    radial-gradient(900px 600px at 50% 120%, var(--soft), transparent 55%);
+  pointer-events:none;
+}
+
+/* grain/dither */
+.landing::after{
+  content:"";
+  position:absolute; inset:0;
+  background-image: radial-gradient(var(--soft) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: .22;
+  pointer-events:none;
+}
+
+.landing-inner{
+  width: min(980px, 92vw);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  transform: translateY(-6vh);
+}
+
+/* ===== Icon Dark Mode Toggle ===== */
+
+
+.theme-toggle-icon{
+  position:absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 6;
+
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+
+  display:grid;
+  place-items:center;
+
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+
+  cursor: pointer;
+  color: var(--text);
+
+  transition:
+    transform .25s var(--ease),
+    background .25s var(--ease),
+    border-color .25s var(--ease);
+}
+.theme-toggle-icon:hover{ transform: translateY(-2px); }
+.theme-toggle-icon:active{ transform: translateY(0) scale(0.97) rotate(12deg); }
+
+.theme-toggle-icon .icon-sun,
+.theme-toggle-icon .icon-moon{
+  position:absolute;
+  width: 22px;
+  height: 22px;
+  transition:
+    opacity .22s var(--ease),
+    transform .35s var(--ease);
+}
+
+/* ---------- SUN ---------- */
+.icon-sun{
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  display:grid;
+  place-items:center;
+}
+.icon-sun::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  margin:auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.icon-sun i{
+  position:absolute;
+  width: 3px;
+  height: 7px;
+  background: currentColor;
+  border-radius: 999px;
+  opacity: .92;
+}
+.icon-sun i:nth-child(1){ transform: rotate(0deg)   translateY(-12px); }
+.icon-sun i:nth-child(2){ transform: rotate(45deg)  translateY(-12px); }
+.icon-sun i:nth-child(3){ transform: rotate(90deg)  translateY(-12px); }
+.icon-sun i:nth-child(4){ transform: rotate(135deg) translateY(-12px); }
+.icon-sun i:nth-child(5){ transform: rotate(180deg) translateY(-12px); }
+.icon-sun i:nth-child(6){ transform: rotate(225deg) translateY(-12px); }
+.icon-sun i:nth-child(7){ transform: rotate(270deg) translateY(-12px); }
+.icon-sun i:nth-child(8){ transform: rotate(315deg) translateY(-12px); }
+
+/* ---------- MOON ---------- */
+.icon-moon{
+  opacity: 0;
+  transform: scale(0.75) rotate(-18deg);
+}
+.icon-moon::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius: 50%;
+  background: currentColor;
+}
+.icon-moon::after{
+  content:"";
+  position:absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg);
+  top: 2px;
+  left: 9px;
+}
+
+/* ---------- STATE SWITCH ---------- */
+.theme-toggle-icon.is-dark .icon-sun{
+  opacity: 0;
+  transform: scale(0.75) rotate(18deg);
+}
+.theme-toggle-icon.is-dark .icon-moon{
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+:root.dark .theme-toggle-icon{
+  box-shadow: 0 12px 34px rgba(0,0,0,.45);
+}
+
+/* Landing typography */
+.landing-title{
+  font-family: inherit;                 /* ✅ same font system as ABOUT */
+  font-size: clamp(46px, 7.2vw, 92px);
+  line-height: .9;
+  letter-spacing: -0.035em;
+  font-weight: 720;                     /* hierarchy via weight, not a different font */
+  color: var(--text);
+  animation: titleIn .7s var(--ease) both;
+}
+
+@keyframes titleIn{
+  from{ opacity: 0; transform: translateY(10px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+.landing-name{
+  position: relative;
+  padding: 0 .06em;
+  font-weight: 820;
+  letter-spacing: -0.015em;
+  z-index: 1;
+}
+
+.landing-name::after{
+  content:"";
+  position:absolute;
+  left: -0.02em;
+  right: -0.02em;
+  bottom: .1em;
+ 
+  background: currentColor;
+  opacity: .14;
+  border-radius: 999px;
+  z-index: -1;
+  transform-origin: left center;
+  transform: scaleX(0.35);
+  animation: nameUnderlineIn .65s var(--ease) .25s both;
+
+  height: 5px;
+  width: 97%;
+  left: 2%;
+  opacity: .87;
+  filter: blur(.2px);
+}
+@keyframes nameUnderlineIn{
+  from{ transform: scaleX(0.35); opacity: 0; }
+  to{ transform: scaleX(1); opacity: .14; }
+}
+
+.landing-cat{
+  margin: 22px auto 10px;
+  display:grid;
+  place-items:center;
+  position: relative;
+}
+.landing-cat::before{
+  content:"";
+  position:absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--soft), transparent 65%);
+  z-index: -1;
+}
+
+.landing-sub{
+  margin: 10px auto 0;
+  max-width: 64ch;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.landing-meta{
+  margin-top: 18px;
+  display:flex;
+  justify-content:center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chip{
+  font-size: 11px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--chip);
+  color: var(--text);
+  opacity: .85;
+}
+
+/* Scroll cue */
+.scroll-cue{
+  display: inline-block;
+  margin-top: 40px;
+  font-size: 11px;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .55;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  animation: scrollFloat 2.6s var(--ease) infinite;
+}
+.scroll-cue:hover{ opacity: .8; }
+@keyframes scrollFloat{
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+
+/* =====================================================
+   Bento Dashboard (reference-style replicate)
+   ===================================================== */
+
+.bento2-shell{
+  --pad: clamp(18px, 2.2vw, 32px);
+  padding: var(--pad);
+  min-height: 100dvh;
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+   padding-bottom: clamp(100px, 6vh, 90px);
+}
+
+/* Ambient vignette + subtle grain */
+.bento2-shell::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 30% 0%, rgba(255,255,255,0.05), transparent 60%),
+    radial-gradient(900px 520px at 80% 100%, rgba(255,255,255,0.04), transparent 60%);
+  opacity: .9;
+}
+:root.dark .bento2-shell::before{
+  background:
+    radial-gradient(900px 520px at 30% 0%, rgba(255,255,255,0.06), transparent 60%),
+    radial-gradient(900px 520px at 80% 100%, rgba(255,255,255,0.04), transparent 60%);
+  opacity: .75;
+}
+.bento2-shell::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.08;
+  background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+}
+
+.bento2-grid{
+  width: min(1440px, calc(100vw - (var(--pad) * 2)));
+  height: calc(100dvh - (var(--pad) * 2));
+  min-height: 0;
+
+  display: grid;
+  gap: 14px;
+
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  position: relative;
+  z-index: 1;
+}
+
+/* Tiles */
+.bento2-tile{
+  position: relative;
+  overflow: hidden;
+  
+  isolation: isolate;              /* enables blend-mode spotlight */min-width: 0;
+
+  border-radius: 22px;
+  padding: 18px;
+  color: var(--text);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  transition:
+    transform .18s var(--ease),
+    box-shadow .18s var(--ease),
+    border-color .18s var(--ease);
+}
+
+/* Light tile */
+.bento2-tile{
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 22px 70px rgba(0,0,0,0.12);
+}
+
+/* Dark tile */
+:root.dark .bento2-tile{
+  border-color: rgba(255,255,255,0.10);
+  background: rgba(20,18,16,0.70);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 22px 70px rgba(0,0,0,0.35);
+}
+
+.bento2-tile:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 18%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    0 26px 85px rgba(0,0,0,0.18);
+}
+:root.dark .bento2-tile:hover{
+  border-color: rgba(255,255,255,0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 26px 85px rgba(0,0,0,0.45);
+}
+
+/* ===== Cursor-follow spotlight (dark + light) ===== */
+:root{
+  --spot: rgba(43,36,30,.10);      /* light mode: subtle shadow */
+  --spotBlend: multiply;
+}
+:root.dark{
+  --spot: rgba(255,255,255,.14);   /* dark mode: subtle glow */
+  --spotBlend: screen;
+}
+
+.bento2-tile{
+  --mx: 50%;
+  --my: 30%;
+}
+
+.bento2-tile::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius: inherit;
+  pointer-events:none;
+
+  opacity:0;
+  transition: opacity .22s var(--ease);
+
+  background: radial-gradient(
+    320px 240px at var(--mx) var(--my),
+    var(--spot),
+    transparent 62%
+  );
+
+  mix-blend-mode: var(--spotBlend);
+  z-index: 0;
+}
+
+/* keep content above spotlight */
+.bento2-tile > *{
+  position: relative;
+  z-index: 1;
+}
+
+.bento2-tile:hover::after{ opacity:1; }
+/* Typography */
+.kicker{
+  font-size: 11px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.headline{
+  margin: 10px 0 8px;
+  font-family: var(--font-display);
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  font-size: clamp(22px, 1.55vw, 30px);
+  line-height: 1.06;
+}
+.title{
+  margin: 10px 0 8px;
+  font-family: var(--font-display);
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.muted{ color: var(--muted); line-height: 1.7; }
+
+/* Pills */
+.pill-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top: 14px; }
+.pill{
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--chip);
+  font-size: 12px;
+}
+
+/* Inputs / buttons */
+.input-row{ display:flex; gap:10px; align-items:center; margin-top: 14px; }
+.input{
+  flex: 1;
+  min-width: 0;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 11px 14px;
+  color: var(--text);
+}
+.btn2{
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.10);
+  padding: 11px 14px;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
+}
+.btn2:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 30%, transparent);
+  background: rgba(255,255,255,0.14);
+}
+
+/* Corner CTA */
+.corner-cta{
+  margin-left:auto;
+  width:36px;
+  height:36px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+  opacity:.9;
+  background: rgba(255,255,255,0.06);
+}
+
+/* ===========================
+   Reference-style image tiles
+   =========================== */
+.imgTile{
+  padding: 0;
+  display: grid;
+  place-items: stretch;
+}
+.imgMock{
+  width: 100%;
+  height: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.95) contrast(1.05);
+  transform: scale(1.01);
+  transition: transform .35s var(--ease);
+}
+.bento2-tile:hover .imgMock{
+  transform: scale(1.04);
+}
+
+/* Placeholder “photo-like” gradients (replace later with real images) */
+.img1{
+  background-image:
+    radial-gradient(600px 300px at 20% 20%, rgba(255,255,255,0.16), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,0.08), rgba(0,0,0,0.18));
+}
+.img2{
+  
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.img3{
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.img4{
+  background-image:
+    radial-gradient(620px 320px at 60% 30%, rgba(255,255,255,0.14), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,0.06), rgba(0,0,0,0.20));
+}
+
+/* ===========================
+   Socials cluster (like reference)
+   =========================== */
+/* D is now a real tile (so it behaves nicely on mobile) */
+.bento2-tile.d.socialsTile{
+  justify-content: flex-start;
+  gap: 10px;
+  /* slight top tuck so it feels aligned with the grid */
+  padding-top: 10px;
+}
+
+
+.bento2-socials-float{
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  gap: 18px;
+  justify-content: end;
+  align-content: start;
+  
+}
+
+.social-btn{
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  color: var(--text);
+
+  border: 1px solid rgba(0,0,0,0.12);
+  background: rgba(255,255,255,0.70);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.10);
+
+  transition:
+    transform .18s var(--ease),
+    background .18s var(--ease),
+    border-color .18s var(--ease),
+    box-shadow .18s var(--ease);
+}
+:root.dark .social-btn{
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 12px 34px rgba(0,0,0,.28);
+}
+.social-btn:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 22%, transparent);
+  background: rgba(255,255,255,0.82);
+  box-shadow: 0 14px 38px rgba(0,0,0,.18);
+}
+:root.dark .social-btn:hover{
+  background: rgba(255,255,255,0.09);
+  box-shadow: 0 14px 40px rgba(0,0,0,.34);
+}
+
+.social-ic{
+  width: 22px;
+  height: 22px;
+  display:block;
+}
+
+/* Resources tile */
+.resources{
+  padding: 20px;
+  justify-content: space-between;
+}
+.resources .kicker{ opacity: .7; }
+.resources .title{
+  font-size: 20px;
+  line-height: 1.15;
+  max-width: 18ch;
+}
+.resources:hover .title{
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  opacity: .95;
+}
+
+/* Stack icons */
+.stack-icons{
+  display: flex;
+  gap: 14px;
+  align-self: center;
+  margin-top: 14px;
+  
+}
+.stack-icons img{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,0.18));
+  transition: transform .18s var(--ease);
+}
+.stack-icons img:hover{ transform: translateY(-2px); }
+
+/* Small center utility tile */
+.centerTile{
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.moonPill{
+  width: 64px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.06);
+  display: grid;
+  place-items: center;
+  opacity: .9;
+  font-size: 18px;
+}
+
+/* Contact tile */
+.contact{
+  padding: 18px 18px 16px;
+  justify-content: space-between;
+}
+.contact .btn2{
+  width: 100%;
+  justify-content: center;
+}
+
+/* Prevent wrap issues */
+.bento2-tile *{ min-width: 0; }
+
+/* ===== Layout map (kept same style as yours) ===== */
+.a{ grid-column: 1 / span 5; grid-row: 1 / span 2; }
+.b{ grid-column: 6 / span 3; grid-row: 1 / span 2; }
+.c{ grid-column: 9 / span 2; grid-row: 1 / span 2; }
+.d{ grid-column: 11 / span 2; grid-row: 1 / span 2; }
+
+.e{ grid-column: 1 / span 3; grid-row: 3 / span 2; }
+.f{ grid-column: 4 / span 4; grid-row: 3 / span 2; }
+.g{ grid-column: 8 / span 3; grid-row: 3 / span 2; }
+
+/* Resources sits under socials */
+.h{ grid-column: 11 / span 2; grid-row: 2 / span 3; }
+
+.i{ grid-column: 1 / span 5; grid-row: 5 / span 2; }
+.j{ grid-column: 6 / span 3; grid-row: 5 / span 2; }
+.k{ grid-column: 9 / span 2; grid-row: 5 / span 2; }
+.l{ grid-column: 11 / span 2; grid-row: 5 / span 2; }
+
+/* Responsive
+   Keep the same "layout language" on smaller screens:
+   - large tablets/laptops: compact 8-col map
+   - tablets: 2-col stacked bento
+   - phones: 1-col
+*/
+@media (max-width: 1180px){
+  .bento2-grid{
+    height: auto;
+    min-height: 0;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: minmax(140px, auto);
+  }
+
+  /* 8-col layout map (same vibe, just reflowed) */
+  .a{ grid-column: 1 / span 8; grid-row: auto; min-height: 220px; }
+  .b{ grid-column: 1 / span 4; grid-row: auto; }
+  .c{ grid-column: 5 / span 2; grid-row: auto; }
+  .d{ grid-column: 7 / span 2; grid-row: auto; }
+
+  .e{ grid-column: 1 / span 4; grid-row: auto; }
+  .f{ grid-column: 5 / span 4; grid-row: auto; }
+  .g{ grid-column: 1 / span 4; grid-row: auto; }
+  .h{ grid-column: 5 / span 4; grid-row: auto; }
+
+  .i{ grid-column: 1 / span 8; grid-row: auto; min-height: 260px; }
+  .j{ grid-column: 1 / span 4; grid-row: auto; }
+  .k{ grid-column: 5 / span 2; grid-row: auto; }
+  .l{ grid-column: 7 / span 2; grid-row: auto; }
+}
+
+@media (max-width: 880px){
+  .bento2-shell{ padding-bottom: clamp(84px, 6vh, 96px); }
+
+  .bento2-grid{
+    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: minmax(150px, auto);
+    gap: 12px;
+  }
+
+  /* simple 2-col stack (keeps balance, avoids overlaps) */
+  .a{ grid-column: 1 / -1; min-height: 220px; }
+  .i{ grid-column: 1 / -1; min-height: 280px; }
+
+  .b,.c,.d,.e,.f,.g,.h,.j,.k,.l{ grid-column: auto; grid-row: auto; }
+
+  /* socials: scale down slightly */
+  .bento2-socials-float{
+    grid-template-columns: repeat(3, 54px);
+    gap: 10px;
+    justify-content: center;
+  }
+  .social-btn{ width: 50px; height: 50px; border-radius: 15px; }
+}
+
+@media (max-width: 520px){
+  .bento2-grid{
+    height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-rows: minmax(150px, auto);
+    gap: 12px;
+  }
+
+  .a,.b,.c,.d,.e,.f,.g,.h,.i,.j,.k,.l{ grid-column: auto; grid-row: auto; }
+
+  .bento2-tile{ border-radius: 20px; padding: 16px; }
+  .imgMock{ border-radius: 20px; }
+
+  /* tighter buttons/inputs */
+  .btn2{ padding: 10px 12px; }
+  .input{ padding: 10px 12px; }
+
+  .bento2-socials-float{
+    grid-template-columns: repeat(3, 48px);
+    gap: 10px;
+    justify-content: center;
+  }
+  .social-btn{ width: 48px; height: 48px; border-radius: 14px; }
+  .social-ic{ width: 20px; height: 20px; }
+}
+
+@media (max-width: 680px){
+
+  .landing-inner{ transform: translateY(-3vh); }
+  .landing-cat::before{ width: 320px; height: 320px; }
+}
+
+
+@media (max-width: 520px){
+  .landing{ padding: 34px 14px; }
+  .landing-inner{ width: min(720px, 94vw); transform: translateY(-1.5vh); }
+
+  .theme-toggle-icon{
+    width: 42px;
+    height: 42px;
+    top: 14px;
+    right: 14px;
+  }
+
+  .landing-title{ font-size: clamp(40px, 10.2vw, 66px); }
+  .landing-sub{ font-size: 14px; }
+
+  .landing-cat{ margin: 18px auto 8px; }
+  .landing-cat::before{ width: 280px; height: 280px; }
+}
+
+@media (max-width: 380px){
+  .landing-inner{ transform: none; }
+  .landing-title{ font-size: clamp(36px, 11.5vw, 58px); }
+  .landing-cat::before{ width: 240px; height: 240px; }
+}
+
+/* Cat eye blink helper (from earlier) */
+.cat-eyeWrap{
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 95ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+.cat-eyeWrap.is-blinking{
+  transform: scaleY(0.08) scaleX(1.05);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .landing-inner{ transform: none; }
+}
+
+
+
+
+/* ===== Cat tracking polish (no layout changes) ===== */
+.landing-cat,
+.catTile{
+  contain: layout paint;
+}
+.landing-cat > div,
+.catCenter > div{
+  will-change: transform;
+}
+
+/* ✅ Tile E cat center + bigger */
+.catTile{
+  display:grid;
+  place-items:center;
+  padding:0;
+  overflow:hidden;
+  position:relative;
+}
+
+/* ✅ perfect visual centering */
+.catCenter{
+  display: grid;
+  place-items: center;
+  transform: translateX(10px) translateY(2px);
+  scale: 1.08;
+}
+
+@media (max-width: 520px){
+  .catCenter{ transform: none; scale: 1; }
+}
+
+
+/* optional: subtle glow for polish */
+.catTile::before{
+  content:"";
+  position:absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--text) 10%, transparent),
+    transparent 65%);
+  opacity: .55;
+  pointer-events:none;
+}
+
+
+/* ===== Grid K (Theme Toggle) ===== */
+
+/* ✅ Tile K: ignore inherited padding + true center */
+.bento2-tile.k{
+  position: relative;
+}
+
+/* ✅ centers contents even if the tile has padding */
+.bento2-tile.k .kCenter{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  pointer-events: none; /* lets clicks pass through unless re-enabled */
+}
+
+/* ✅ allow button click */
+.bento2-tile.k .themePill{
+  pointer-events: auto;
+}
+
+/* pill container */
+.themePill{
+  width: 108px;
+  height: 52px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 12px 40px rgba(0,0,0,.35);
+  position: relative;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background .25s ease, border-color .25s ease, transform .15s ease;
+  margin: 0;
+}
+
+.themePill:hover{ transform: translateY(-1px); }
+.themePill:active{ transform: translateY(0px) scale(.99); }
+
+:root:not(.dark) .themePill{
+  border-color: rgba(0,0,0,.10);
+  background: rgba(0,0,0,.03);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    0 12px 40px rgba(0,0,0,.12);
+}
+
+/* sliding knob */
+.pillKnob{
+  position:absolute;
+  top: 6px;
+  left: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.28);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.10);
+  display:grid;
+  place-items:center;
+  transition: transform .35s cubic-bezier(.2,.9,.2,1), background .25s ease, border-color .25s ease;
+  overflow:hidden;
+}
+
+:root:not(.dark) .pillKnob{
+  background: rgba(255,255,255,.85);
+  border-color: rgba(0,0,0,.10);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.65);
+}
+
+/* move knob when dark */
+:root.dark .pillKnob{
+  transform: translateX(56px);
+}
+
+/* icons */
+.pillIcon{
+  position:absolute;
+  font-size: 18px;
+  line-height: 1;
+  transition: opacity .25s ease, transform .35s cubic-bezier(.2,.9,.2,1), filter .25s ease;
+}
+
+/* moon visible in dark, sun hidden */
+.pillIcon.moon{
+  opacity: 1;
+  transform: scale(1);
+  color: #ffd37a;
+  filter: drop-shadow(0 0 10px rgba(255,211,122,.22));
+}
+.pillIcon.sun{
+  opacity: 0;
+  transform: scale(.8);
+  color: #ffb84d;
+  filter: drop-shadow(0 0 10px rgba(255,184,77,.25));
+}
+
+/* in light mode switch visibility */
+:root:not(.dark) .pillIcon.moon{
+  opacity: 0;
+  transform: scale(.8);
+}
+:root:not(.dark) .pillIcon.sun{
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* micro animation */
+:root.dark .pillKnob{ animation: popIn .28s ease; }
+:root:not(.dark) .pillKnob{ animation: popIn .28s ease; }
+
+@keyframes popIn{
+  0%{ transform: translateX(var(--tx, 0)) scale(.92); }
+  100%{ transform: translateX(var(--tx, 0)) scale(1); }
+}
+
+:root.dark{ --tx: 56px; }
+:root:not(.dark){ --tx: 0px; }
+
+
+.stackTile{
+  position: relative;
+  padding: 58px 29px 26px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+/* Title — match Grid I "SEND A QUICK MESSAGE" */
+.stackTitle{
+  padding-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text) 78%, transparent);
+}
+
+
+/* Stack title contrast (extra safety) */
+:root:not(.dark) .stackTitle{ color: rgba(43,36,30,.78); }
+:root.dark .stackTitle{ color: rgba(243,238,231,.70); }
+/* Icon row — sits lower, not centered */
+.stackIcons{
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin-top: 6px;           /* ⬅ subtle drop */
+  margin-left: 10px;
+
+}
+
+/* Icon tiles */
+.stackIcon{
+  width: 58px;               /* ⬅ slightly smaller */
+  height: 58px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 12px 30px rgba(0,0,0,.35);
+
+  transition: transform .18s ease, background .18s ease;
+}
+
+/* Light mode */
+:root:not(.dark) .stackIcon{
+  background: rgba(0,0,0,.03);
+  border-color: rgba(0,0,0,.10);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    0 10px 20px rgba(0,0,0,.10);
+}
+
+/* Logos — calmer size */
+.stackIcon img{
+  width: 30px;               /* ⬅ smaller like reference */
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Hover polish */
+.stackIcon:hover{
+  transform: translateY(-2px);
+}
+
+/* ===== Grid A — Intro (reference copy) ===== */
+
+.introTile{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* small header */
+.introTile{
+  padding-top: 6px;
+}
+
+.introHeader{
+  font-size:30px;
+  font-weight: 500;
+  color: rgba(255,255,255,.70);
+  margin-left: 10px;
+}
+
+:root:not(.dark) .introHeader{
+  color: rgba(0,0,0,.65);
+}
+
+/* description text */
+.introBody{
+  max-width: 50ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(255,255,255,.55);
+  margin-left: 10px;
+}
+
+:root:not(.dark) .introBody{
+  color: rgba(0,0,0,.60);
+}
+
+/* ===== Grid F (About — reference layout) ===== */
+.aboutTile{
+  position: relative;
+  padding: 35px 22px 22px 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* keep text up top */
+}
+
+/* ABOUT label */
+.aboutTile .aboutKicker{
+  letter-spacing: .28em;
+  font-size: 13px;
+  opacity: .55;
+  margin-top: 2px;
+}
+
+/* main sentence */
+.aboutTile .aboutText{
+  margin-top: 35px;          /* ✅ pushes text down like reference */
+  max-width: 28.5ch;           /* ✅ keeps lines tight like reference */
+  font-size: 21px;           /* ✅ smaller than headline style */
+  line-height: 1.35;
+  font-weight: 500;
+
+  color: rgba(255,255,255,.78); /* ✅ softer like reference */
+}
+
+:root:not(.dark) .aboutTile .aboutText{
+  color: rgba(0,0,0,.70);
+}
+
+/* corner CTA */
+.aboutTile .corner-cta{
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 10px 24px rgba(0,0,0,.30);
+
+  opacity: .85;
+  transition: transform .18s ease, opacity .18s ease, border-color .18s ease, background .18s ease;
+}
+
+:root:not(.dark) .aboutTile .corner-cta{
+  border-color: rgba(0,0,0,.10);
+  background: rgba(0,0,0,.03);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    0 10px 24px rgba(0,0,0,.10);
+}
+
+.aboutTile:hover .corner-cta{
+  transform: translateY(-1px);
+  opacity: 1;
+  border-color: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+}
+
+:root:not(.dark) .aboutTile:hover .corner-cta{
+  border-color: rgba(0,0,0,.16);
+  background: rgba(0,0,0,.04);
+}
+
+/* ===== Grid H: titles-only with floating hover preview ===== */
+
+/* make sure the tile can “host” floating preview */
+.resourcesHover{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: visible; /* important for float */
+}
+
+/* header row */
+.resourcesHead{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap: 10px;
+}
+
+/* Make the "PROJECTS" header a bit bolder / bigger */
+.resourcesHead .kicker{
+  margin-top: 10px;
+  font-size: 13px;
+  letter-spacing: .26em;
+  font-weight: 700;
+}
+
+.resourcesAll{
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .72;
+  text-decoration:none;
+  color: var(--text);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.resourcesAll:hover{
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* list wrapper */
+.resourcesListHover{
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  border-radius: 18px;
+}
+
+/* small helper text */
+.resourcesHint{
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  opacity: .75;
+}
+
+/* Row = title + divider line */
+.resRow{
+  position: relative;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+
+  padding: 16px 10px;
+  text-decoration:none;
+  color: var(--text);
+
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  overflow: visible;
+  isolation: isolate; /* keeps preview overlay nicely layered */
+}
+
+.resourcesListHover .resRow:last-child{
+  border-bottom: 0;
+}
+
+:root:not(.dark) .resRow{
+  border-bottom-color: rgba(0,0,0,.10);
+}
+
+/* Title */
+.resRowTitle{
+  font-size: 14px;
+  font-weight: 600;
+  
+  letter-spacing: -0.01em;
+  line-height: 1.5;
+  opacity: .88;
+
+  /* keep titles in one clean line */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.resRow:hover .resRowTitle,
+.resRow:focus-visible .resRowTitle{
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+/* subtle row hover “glow” */
+.resRow::before{
+  content:"";
+  position:absolute;
+  inset: 6px;
+  border-radius: 14px;
+  opacity: 0;
+  pointer-events:none;
+  background: rgba(255,255,255,.04);
+  transition: opacity .18s ease;
+}
+:root:not(.dark) .resRow::before{
+  background: rgba(0,0,0,.03);
+}
+
+.resRow:hover::before,
+.resRow:focus-visible::before{
+  opacity: 1;
+}
+
+
+
+
+/* Grid H: pre-modal click animation (smooth, no layout shift)
+   Avoid animating transform on .resRow to prevent "shake" with other hover transforms. */
+.resRow.isOpening{
+  /* keep stable */
+}
+
+.resRow.isOpening::before{
+  opacity: 1;
+  background: rgba(255,255,255,.08);
+  animation: resRowPulse .18s cubic-bezier(.2,.85,.2,1) both;
+}
+
+:root:not(.dark) .resRow.isOpening::before{
+  background: rgba(0,0,0,.06);
+}
+
+.resRow.isOpening .resRowTitle{
+  animation: resRowTitleTighten .18s cubic-bezier(.2,.85,.2,1) both;
+}
+
+@keyframes resRowPulse{
+  0%{ transform: scaleX(.985) scaleY(.92); filter: blur(0px); }
+  60%{ transform: scaleX(1) scaleY(1); filter: blur(.15px); }
+  100%{ transform: scaleX(1) scaleY(1); filter: blur(0px); }
+}
+
+@keyframes resRowTitleTighten{
+  0%{ opacity: .92; letter-spacing: .01em; }
+  60%{ opacity: 1; letter-spacing: 0em; }
+  100%{ opacity: 1; letter-spacing: 0em; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .resRow.isOpening::before,
+  .resRow.isOpening .resRowTitle{ animation: none; }
+}
+/* Floating preview (hidden by default) */
+.resFloat{
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  left: auto;
+
+  /* sits to the RIGHT (into the empty gutter) */
+  transform: translate(calc(100% + 18px), -50%) scale(.98);
+
+  width: 150px;
+  height: 208px; /* slightly taller, like reference */
+  border-radius: 22px;
+
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 30;
+
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  box-shadow:
+    0 26px 70px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.10);
+
+  transition:
+    opacity .18s ease,
+    transform .22s cubic-bezier(.2,.9,.2,1),
+    filter .18s ease;
+}
+
+:root:not(.dark) .resFloat{
+  border-color: rgba(0,0,0,.12);
+  background: rgba(255,255,255,.72);
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.55);
+}
+
+/* show on hover/focus */
+.resRow:hover .resFloat,
+.resRow:focus-visible .resFloat{
+  opacity: 1;
+  transform: translate(calc(100% + 24px), -50%) scale(1);
+}
+
+/* preview image */
+.resFloat img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.04);
+  opacity: .96;
+}
+
+/* overlay for consistency */
+.resFloat::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(120% 90% at 20% 10%, rgba(255,255,255,.10), transparent 60%),
+    linear-gradient(to top, rgba(0,0,0,.46), rgba(0,0,0,.06));
+  pointer-events:none;
+}
+:root:not(.dark) .resFloat::after{
+  background:
+    radial-gradient(120% 90% at 20% 10%, rgba(0,0,0,.06), transparent 60%),
+    linear-gradient(to top, rgba(0,0,0,.16), rgba(0,0,0,.02));
+}
+
+/* ---- If there's not enough right gutter, fall back to the LEFT (inside the grid) ---- */
+@media (max-width: 1500px){
+  .resFloat{
+    right: auto;
+    left: 8px;
+    transform: translate(calc(-100% - 18px), -50%) scale(.98);
+  }
+  .resRow:hover .resFloat,
+  .resRow:focus-visible .resFloat{
+    transform: translate(calc(-100% - 24px), -50%) scale(1);
+  }
+}
+
+/* ---- On smaller screens, keep the preview INSIDE/right so it never gets clipped ---- */
+@media (max-width: 880px){
+  .resFloat{
+    left: auto;
+    right: 10px;
+    transform: translate(0, -50%) scale(.98);
+  }
+  .resRow:hover .resFloat,
+  .resRow:focus-visible .resFloat{
+    transform: translate(0, -50%) scale(1);
+  }
+}
+
+/* Contact: subtle "copied" state */
+.btn2.isCopied{
+  border-color: color-mix(in srgb, var(--text) 38%, transparent);
+  background: rgba(255,255,255,0.18);
+}
+:root.dark .btn2.isCopied{
+  background: rgba(255,255,255,0.12);
+}
+
+/* =========================
+   GRID I — Mini Contact (premium dock layout)
+   ========================= */
+
+.bento2-tile.i.miniContact{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  height: 100%;
+  min-height: 0;
+
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+/* Top */
+.miniContactTop{
+  display: grid;
+  gap: 8px;
+  align-items: start;
+}
+
+.miniContactKicker{
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  opacity: .72;
+}
+
+/* Chips: single-line, scrollable */
+.miniContactChips{
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.miniContactChips::-webkit-scrollbar{ width: 0; height: 0; }
+
+.miniChip{
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  border: 1px solid var(--line);
+  color: color-mix(in srgb, var(--text) 88%, transparent);
+  opacity: .86;
+
+  transition: transform .18s var(--ease), opacity .18s var(--ease),
+              border-color .18s var(--ease), background .18s var(--ease);
+}
+:root.dark .miniChip{
+  background: rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.10);
+}
+
+.miniChip:hover{
+  opacity: 1;
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 28%, transparent);
+}
+
+.miniChip.isActive{
+  opacity: 1;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  border-color: color-mix(in srgb, var(--text) 30%, transparent);
+}
+:root.dark .miniChip.isActive{
+  background: rgba(255,255,255,.05);
+  border-color: rgba(255,255,255,.18);
+}
+
+/* Field fills remaining space */
+.miniContactField{
+  position: relative;
+  min-height: 0;
+}
+
+/* Textarea fills the tile, with padding reserved for the dock */
+.miniContactTextarea{
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  border-radius: 18px;
+  padding: 14px;
+  padding-bottom: 70px;
+  resize: none;
+
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  border: 1px solid var(--line);
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+
+  outline: none;        /* ✅ no outer ring */
+  box-shadow: none;     /* ✅ no glow */
+
+  transition: background .18s var(--ease);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+:root.dark .miniContactTextarea{
+  background: rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.10);
+}
+
+.miniContactTextarea::-webkit-scrollbar{ width: 0; height: 0; }
+
+.miniContactTextarea::placeholder,
+.miniContactInput::placeholder{
+  color: color-mix(in srgb, var(--text) 45%, transparent);
+}
+
+/* ✅ Focus: NO border change, NO outline. Only slight background shift */
+.miniContactTextarea:focus,
+.miniContactTextarea:focus-visible{
+  outline: none;
+  box-shadow: none;
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+}
+:root.dark .miniContactTextarea:focus,
+:root.dark .miniContactTextarea:focus-visible{
+  border-color: rgba(255,255,255,.10);
+  background: rgba(255,255,255,.035);
+}
+
+/* Counter sits ABOVE the dock */
+.miniContactMeta{
+  position: absolute;
+  right: 14px;
+  bottom: 62px;
+  pointer-events: none;
+  opacity: .6;
+  font-size: 12px;
+}
+.miniCount{
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.08);
+}
+:root.dark .miniCount{
+  background: rgba(0,0,0,.30);
+  border-color: rgba(255,255,255,.10);
+}
+
+/* Floating dock (email + send) */
+.bento2-tile.i.miniContact .miniContactRow{
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+
+  padding: 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 34px rgba(0,0,0,.14);
+}
+:root.dark .bento2-tile.i.miniContact .miniContactRow{
+  background: rgba(15,13,11,.55);
+  border-color: rgba(255,255,255,.12);
+  box-shadow: 0 14px 40px rgba(0,0,0,.38);
+}
+
+/* Email input (inside dock) */
+.bento2-tile.i.miniContact .miniContactRow .miniContactInput{
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  border-radius: 999px;
+  padding: 10px 14px;
+
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+
+  outline: none;        /* ✅ no outer ring */
+  box-shadow: none;     /* ✅ no glow */
+
+  transition: background .18s var(--ease);
+}
+:root.dark .bento2-tile.i.miniContact .miniContactRow .miniContactInput{
+  border-color: rgba(255,255,255,.12);
+}
+
+/* ✅ Focus: keep border the same, no ring */
+.bento2-tile.i.miniContact .miniContactRow .miniContactInput:focus,
+.bento2-tile.i.miniContact .miniContactRow .miniContactInput:focus-visible{
+  outline: none;
+  box-shadow: none;
+  border-color: color-mix(in srgb, var(--line) 85%, transparent);
+  background: rgba(255,255,255,.02);
+}
+:root.dark .bento2-tile.i.miniContact .miniContactRow .miniContactInput:focus,
+:root.dark .bento2-tile.i.miniContact .miniContactRow .miniContactInput:focus-visible{
+  border-color: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+}
+
+/* HARD reset for Send button */
+.bento2-tile.i.miniContact .miniContactRow .btn2.miniContactBtn{
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+
+  white-space: nowrap;
+  justify-self: end;
+}
+
+/* Subtle error */
+.bento2-tile.i.miniContact.isError .miniContactInput,
+.bento2-tile.i.miniContact.isError .miniContactTextarea{
+  border-color: rgba(255,90,90,.45) !important;
+}
+
+/* ✅ Removed: focus-visible outline ring block entirely */
+
+/* Mobile: dock stacks */
+@media (max-width: 720px){
+  .bento2-tile.i.miniContact .miniContactRow{
+    grid-template-columns: 1fr;
+  }
+  .bento2-tile.i.miniContact .miniContactRow .btn2.miniContactBtn{
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  /* give the stacked dock enough room so content never overlaps */
+  .bento2-tile.i.miniContact .miniContactTextarea{
+    padding-bottom: 118px;
+  }
+  .bento2-tile.i.miniContact .miniContactMeta{
+    bottom: 110px;
+  }
+}
+
+/* iPhone SE / very small phones */
+@media (max-width: 380px){
+  /* keep Grid I usable and prevent the dock from feeling cramped */
+  .bento2-tile.i.miniContact{ min-height: 320px; }
+  .bento2-tile.i.miniContact .miniContactRow{
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    padding: 7px;
+    gap: 8px;
+  }
+  .bento2-tile.i.miniContact .miniContactRow .miniContactInput{ height: 38px; }
+  .bento2-tile.i.miniContact .miniContactRow .btn2.miniContactBtn{ height: 38px; }
+  .bento2-tile.i.miniContact .miniContactTextarea{ padding-bottom: 120px; }
+  .bento2-tile.i.miniContact .miniContactMeta{ bottom: 112px; }
+}
+/* ===== Grid L — cleaner typography + borderless CTA ===== */
+.bento2-tile.l.cvTile{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  /* tighter, more editorial spacing */
+  gap: 6px;
+}
+
+/* RESUME */
+.bento2-tile.l.cvTile .cvKicker{
+  font-size: 13px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  opacity: .70;
+  margin-top:  10px;
+}
+
+/* Title */
+.bento2-tile.l.cvTile .cvTitle{
+  margin: 0;
+  margin-top: 25px;
+  font-size: 18px;
+  font-weight: 720;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+}
+
+/* Meta row (PDF • Updated 2026) */
+.bento2-tile.l.cvTile .cvMeta{
+  margin-top: 10px;          /* creates the nice breathing space like your ref */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* CTA pinned bottom (borderless text link) */
+.bento2-tile.l.cvTile .btn2.cvBtn{
+  margin-top: auto;
+
+  /* remove pill/outline */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  border-radius: 0 !important;
+
+  /* clean link look */
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-left: 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 650;
+  color: color-mix(in srgb, var(--text) 88%, transparent) !important;
+  text-decoration: none !important;
+  opacity: .90;
+
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.bento2-tile.l.cvTile .btn2.cvBtn:hover{
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.bento2-tile.l.cvTile .btn2.cvBtn span{
+  opacity: .75;
+  transform: translateY(-1px);
+}
+
+/* if your .btn2 adds underline via pseudo-elements, kill it */
+.bento2-tile.l.cvTile .btn2.cvBtn::before,
+.bento2-tile.l.cvTile .btn2.cvBtn::after{
+  content: none !important;
+  display: none !important;
+}
+
+
+/* ===== Full-bleed Footer (clean + elegant, no weird gap) ===== */
+.footerFull{
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* keep it full-bleed (no external margin gap) */
+  margin-top: 0;
+
+  background: color-mix(in srgb, var(--bg) 90%, var(--accent) 10%);
+  border-top: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dark mode tone */
+:root.dark .footerFull{
+  background: rgba(10,10,10,.86);
+}
+
+/* Soft “fade-in” at the top so it doesn’t feel stuck to the bento */
+.footerFull::before{
+  content:"";
+  position:absolute;
+  left:0; right:0; top:0;
+  height: 38px;
+  pointer-events:none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--bg) 30%, transparent)
+  );
+  opacity: .9;
+}
+:root.dark .footerFull::before{
+  opacity: .5;
+}
+
+/* Inner padding = your “space” (instead of margin-top gap) */
+.footerInner{
+  position: relative;
+  padding: clamp(22px, 3vw, 40px) clamp(18px, 3vw, 48px) clamp(26px, 4vw, 54px);
+}
+
+/* Subtle vertical dividers (reference-style but softer) */
+.footerInner::after{
+  content:"";
+  position:absolute;
+  inset: 12px 0 12px 0;  /* keep off the very top/bottom */
+  pointer-events:none;
+
+  opacity: .18;          /* soft in light mode */
+  background:
+    linear-gradient(to right,
+      transparent 0,
+      transparent 33.33%,
+      var(--line) 33.33%,
+      var(--line) calc(33.33% + 1px),
+      transparent calc(33.33% + 1px),
+      transparent 66.66%,
+      var(--line) 66.66%,
+      var(--line) calc(66.66% + 1px),
+      transparent calc(66.66% + 1px),
+      transparent 100%);
+  /* fades the lines top/bottom for elegance */
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+}
+:root.dark .footerInner::after{
+  opacity: .10; /* even softer in dark */
+}
+
+/* Top row */
+.footerTop{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 18px;
+
+  padding-bottom: 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+
+/* Left meta */
+.footerMeta{
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  min-width: 0;
+}
+
+.footerMetaBlock{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 18px;
+  border-right: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+}
+.footerMetaBlock:last-child{
+  padding-right: 0;
+  border-right: none;
+}
+
+.footerDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 70%, transparent);
+  opacity: .85;
+}
+
+.footerMetaText{
+  display: grid;
+  gap: 2px;
+  line-height: 1.05;
+}
+
+.footerMetaTime{
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+}
+
+.footerMetaCity{
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Nav */
+.footerNav{
+  display: inline-flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.footerNav a{
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+
+  color: color-mix(in srgb, var(--text) 84%, transparent);
+  text-decoration: none;
+  opacity: .82;
+
+  transition: opacity .18s var(--ease), transform .18s var(--ease);
+}
+
+.footerNav a:hover{
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* Bottom row */
+.footerBottom{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  padding-top: 18px;
+  align-items: end;
+}
+
+.footerBrandName{
+  font-weight: 820;
+  letter-spacing: -0.03em;
+  font-size: clamp(26px, 3vw, 34px);
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+  line-height: 1.0;
+}
+
+.footerBrandTag{
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.footerCopy{
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* Mobile */
+@media (max-width: 720px){
+  .footerTop{ grid-template-columns: 1fr; }
+  .footerNav{ justify-content: flex-start; }
+  .footerBottom{ grid-template-columns: 1fr; }
+  .footerCopy{ text-align: left; }
+}
+/* ===== Full-bleed Footer (clean + elegant) ===== */
+.footerFull{
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-top: 0;
+
+  background: color-mix(in srgb, var(--bg) 90%, var(--accent) 10%);
+  border-top: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dark mode tone */
+:root.dark .footerFull{
+  background: rgba(10,10,10,.86);
+}
+
+/* Inner spacing (this is the "gap" but inside the footer so it feels intentional) */
+.footerInner{
+  position: relative;
+  padding: clamp(36px, 4.4vw, 56px) clamp(18px, 3vw, 48px) clamp(26px, 4vw, 54px);
+}
+
+/* Subtle vertical dividers (reference-style but softer) */
+.footerInner::after{
+  content:"";
+  position:absolute;
+  inset: 12px 0 12px 0;
+  pointer-events:none;
+
+  opacity: .18; /* light mode */
+  background:
+    linear-gradient(to right,
+      transparent 0,
+      transparent 33.33%,
+      var(--line) 33.33%,
+      var(--line) calc(33.33% + 1px),
+      transparent calc(33.33% + 1px),
+      transparent 66.66%,
+      var(--line) 66.66%,
+      var(--line) calc(66.66% + 1px),
+      transparent calc(66.66% + 1px),
+      transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  z-index: 0;
+}
+:root.dark .footerInner::after{
+  opacity: .10;
+}
+
+/* ===== Peek Cat (centered, looks like it's watching) ===== */
+.footerPeekCat{
+  position: absolute;
+  left: 50%;
+  top: -44px;                   /* peeking from the top edge */
+  transform: translateX(-50%);
+  width: clamp(220px, 30vw, 420px);
+  height: auto;
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: 1;                   /* above grid lines */
+  opacity: .95;
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,.28));
+}
+
+:root:not(.dark) .footerPeekCat{
+  opacity: .90;
+  filter: drop-shadow(0 14px 28px rgba(77,68,61,.22));
+}
+
+/* Keep footer content above everything */
+.footerTop,
+.footerBottom{
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== Top row ===== */
+.footerTop{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 18px;
+
+  padding-bottom: 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+
+/* Left meta blocks */
+.footerMeta{
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  min-width: 0;
+}
+
+.footerMetaBlock{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 18px;
+  border-right: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+}
+.footerMetaBlock:last-child{
+  padding-right: 0;
+  border-right: none;
+}
+
+.footerDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 70%, transparent);
+  opacity: .85;
+}
+
+.footerMetaText{
+  display: grid;
+  gap: 2px;
+  line-height: 1.05;
+}
+
+.footerMetaTime{
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+}
+
+.footerMetaCity{
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Nav */
+.footerNav{
+  display: inline-flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.footerNav a{
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+
+  color: color-mix(in srgb, var(--text) 84%, transparent);
+  text-decoration: none;
+  opacity: .82;
+
+  transition: opacity .18s var(--ease), transform .18s var(--ease);
+}
+.footerNav a:hover{
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* ===== Bottom row ===== */
+.footerBottom{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  padding-top: 18px;
+  align-items: end;
+}
+
+.footerBrandName{
+  font-weight: 820;
+  letter-spacing: -0.03em;
+  font-size: clamp(26px, 3vw, 34px);
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+  line-height: 1.0;
+}
+
+.footerBrandTag{
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.footerCopy{
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* Mobile */
+@media (max-width: 720px){
+  .footerTop{ grid-template-columns: 1fr; }
+  .footerNav{ justify-content: flex-start; }
+  .footerBottom{ grid-template-columns: 1fr; }
+  .footerCopy{ text-align: left; }
+  .footerPeekCat{
+    top: -48px;
+    width: clamp(200px, 58vw, 320px);
+  }
+}
+
+
+html, body, button, input, textarea, select {
+  font-family: var(--font-body);
+}
+
+/* Slightly cleaner defaults */
+html, body{
+  letter-spacing: -0.005em;
+  font-weight: 450;
+}
+
+/* --- LABEL STYLE (your screenshot vibe) --- */
+:root{
+  --label-track: .28em;
+  --label-size: 13px;
+}
+
+/* Make ALL kickers + small headers consistent like "STACK I USE" */
+.kicker,
+.miniContactKicker,
+.cvKicker,
+.pModalKicker,
+.aboutTile .aboutKicker{
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  font-size: var(--label-size);
+  font-weight: 600;
+  color: color-mix(in srgb, var(--text) 70%, transparent);
+  opacity: .85;
+}
+
+/* --- Bento headings (clean + editorial) --- */
+.headline,
+.title,
+.introHeader,
+.footerBrandName,
+.pModalTitle{
+  font-family: inherit;       /* ✅ same font as ABOUT */
+  letter-spacing: -0.02em;
+  font-weight: 650;
+}
+
+/* --- Bento main text: keep readable but premium --- */
+.muted,
+.introBody,
+.aboutTile .aboutText,
+.pModalBlurb,
+.footerBrandTag,
+.footerCopy{
+  font-family: inherit;
+  letter-spacing: -0.005em;
+  font-weight: 450;
+}
+
+/* --- Resources list titles (Projects list on the right) --- */
+.resRowTitle{
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: .02em;      /* slight spacing like your reference */
+  opacity: .92;
+}
+
+/* =========================
+   Landing title: "Hi, I'm Kraven"
+   match the SAME font system as ABOUT
+   but still looks like a hero
+   ========================= */
+
+.landing-title{
+  font-family: inherit;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+}
+
+/* Optional: make landing title feel closer to the label vibe (subtle) */
+.landing-title .landing-name{
+  font-weight: 750;
+  letter-spacing: -0.015em;
+}
+/* Intro paragraph (4th year IT student...) */
+.introBody{
+  font-size: 15px;              /* or 14.5px if you want tighter */
+  line-height: 1.7;
+  font-weight: 450;             /* sweet spot */
+  letter-spacing: -0.005em;     /* subtle polish */
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+}
+
+/* About paragraph (I like making elegant...) */
+.aboutTile .aboutText{
+  font-size: 19px;              /* keep it a bit larger than intro */
+  line-height: 1.45;
+  font-weight: 480;             /* slightly stronger than intro */
+  letter-spacing: -0.006em;
+  color: color-mix(in srgb, var(--text) 70%, transparent);
+}
+/* =========================
+   Projects Modal (Grid H)
+   Elegant gallery + motion (additive)
+   ========================= */
+
+.pModalOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding-bottom: 100px;
+}
+
+/* Open/close states (JS toggles .isOpen / .isClosing) */
+.pModalOverlay.isOpen{ animation: pFade .18s ease both; }
+.pModalOverlay.isClosing{
+  animation: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s var(--ease);
+}
+
+@keyframes pFade{
+  from{ opacity: 0; } to{ opacity: 1; }
+}
+
+.pModalBackdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.52);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.pModalOverlay.isClosing .pModalBackdrop{ opacity: 0; transition: opacity .22s var(--ease); }
+
+:root:not(.dark) .pModalBackdrop{
+  background: rgba(25,18,12,.18);
+}
+
+.pModalCard{
+  position: relative;
+  width: min(980px, calc(100vw - 28px));
+  /* Fixed outer size so every project modal feels consistent */
+  height: min(65vh, 760px);
+  border-radius: 28px;
+  overflow: hidden;
+
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  box-shadow: 0 40px 140px rgba(0,0,0,.22);
+
+  display: flex;
+  flex-direction: column;
+
+  animation: pPop .26s var(--ease) both;
+  /* Defaults, overridden via --ox/--oy set from the click point */
+  transform-origin: var(--ox, 50%) var(--oy, 55%);
+  will-change: transform, opacity, filter;
+}
+
+.pModalOverlay.isClosing .pModalCard{
+  animation: none;
+  opacity: 0;
+  transform: translateY(10px) scale(.985);
+  transition: transform .22s var(--ease), opacity .22s var(--ease);
+}
+
+.pModalOverlay.isClosing .pModalCard{
+  animation: none;
+  opacity: 0;
+  transform: translateY(10px) scale(.985);
+  transition: transform .22s var(--ease), opacity .22s var(--ease);
+}
+
+@keyframes pPop{
+  from{ opacity: 0; transform: translateY(14px) scale(.94); filter: blur(8px); }
+  to{ opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .pModalOverlay.isOpen{ animation: none; }
+  .pModalCard{ animation: none; filter: none; }
+}
+
+:root.dark .pModalCard{
+  background: color-mix(in srgb, #0F0D0B 72%, var(--surface) 28%);
+  box-shadow: 0 44px 160px rgba(0,0,0,.62);
+}
+
+.pModalTop{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+
+.pModalHead{ min-width: 0; }
+
+.pModalKicker{
+  font-size: 11px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text) 72%, transparent);
+}
+
+.pModalTitle{
+  margin-top: 6px;
+  font-size: 22px;
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+  line-height: 1.15;
+  word-break: break-word;
+}
+
+.pModalTags{
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .02em;
+}
+
+.pModalClose{
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  color: color-mix(in srgb, var(--text) 85%, transparent);
+
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  transition: transform .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease), opacity .18s var(--ease);
+}
+
+.pModalClose:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+}
+
+.pModalClose:active{ transform: translateY(0); }
+
+.pModalMain{
+  display: grid;
+  grid-template-columns: 1.45fr .55fr;
+  gap: 0;
+  min-height: 0;
+  flex: 1;
+  height: 100%;
+}
+
+.pModalMedia{
+  position: relative;
+  min-height: 0;
+  padding: 18px;
+
+  border-right: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* The inner frame stays the same size, while images scale to fit */
+.pModalFrame{
+  position: relative;
+  /* Frame adapts to current image aspect ratio (set inline in JSX) */
+  width: 100%;
+  max-height: 100%;
+  margin: auto 0;
+
+  /* ✅ Make space for the nav BELOW the image (no overlay) */
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 12px;
+
+  padding: 14px 14px 12px;
+
+  border-radius: 20px;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  box-shadow: 0 22px 55px rgba(0,0,0,.18);
+  overflow: hidden;
+}
+
+.pModalImg{
+  /* ✅ Auto-scale by its own aspect ratio */
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+
+  object-fit: contain; /* no crop */
+
+  justify-self: center;
+  align-self: center;
+
+  display: block;
+  animation: pImg .18s ease both;
+}
+
+@keyframes pImg{
+  from{ opacity: 0; transform: scale(.995); }
+  to{ opacity: 1; transform: scale(1); }
+}
+
+.pModalNav{
+  /* ✅ Put the pill in the blank space BELOW the image */
+  position: static;
+  left: auto;
+  bottom: auto;
+  transform: none;
+
+  justify-self: center;
+  align-self: end;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.pModalNav button{
+  height: 32px;
+  min-width: 36px;
+  padding: 0 10px;
+
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  background: transparent;
+  color: color-mix(in srgb, var(--text) 86%, transparent);
+  cursor: pointer;
+
+  transition: transform .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease), opacity .18s var(--ease);
+}
+
+.pModalNav button:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+}
+
+.pModalCount{
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .04em;
+  padding: 0 6px;
+}
+
+.pModalSide{
+  min-height: 0;
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pModalBlurb{
+  font-size: 13px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--text) 82%, transparent);
+}
+
+.pModalThumbs{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.pModalThumb{
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .18s var(--ease), border-color .18s var(--ease), opacity .18s var(--ease);
+}
+
+.pModalThumb img{
+  width: 100%;
+  height: 66px;
+  object-fit: cover;
+  display: block;
+  opacity: .95;
+}
+
+.pModalThumb:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 18%, transparent);
+}
+
+.pModalThumb.isActive{
+  border-color: color-mix(in srgb, var(--text) 22%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--text) 12%, transparent);
+}
+
+.pModalActions{
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pModalLink{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+
+  font-size: 12px;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: color-mix(in srgb, var(--text) 85%, transparent);
+
+  transition: transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease), opacity .18s var(--ease);
+}
+
+.pModalLink:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  opacity: 1;
+}
+
+.pModalTip{
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--muted);
+}
+
+@media (max-width: 900px){
+  .pModalMain{ grid-template-columns: 1fr; }
+  .pModalMedia{
+    border-right: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  }
+  /* keep the media area readable on shorter screens */
+  .pModalFrame{ min-height: 44vh; }
+  .pModalThumbs{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pModalThumb img{ height: 52px; }
+}
+
+@media (max-width: 560px){
+  .pModalTitle{ font-size: 18px; }
+    .pModalThumbs{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* =========================================================
+   Responsive polish overrides (mobile + iPhone SE safe)
+   - Fix Mini Contact "thick radius" + make email row elegant
+   - Prevent Projects hover preview layers from blocking taps
+   - Keep focus/tap rings clean on touch targets (no glow)
+   ========================================================= */
+
+/* ---------- Projects: on small screens disable hover preview layer that can block taps ---------- */
+@media (max-width: 880px){
+  .resFloat{ display:none !important; }
+  .resFloat, .resFloat *{ pointer-events:none !important; }
+  .resourcesListHover button,
+  .resourcesListHover a{
+    position: relative;
+    z-index: 2;
+  }
+}
+
+/* ---------- Mini Contact: prevent "double curve / thick arc" artifacts ---------- */
+.bento2-tile.i.miniContact .miniContactRow{
+  overflow: hidden; /* clips inner rounded children to avoid thick arcs */
+  -webkit-transform: translateZ(0); /* helps iOS paint rounded edges cleanly */
+}
+
+/* iOS input/button styling reset inside the mini contact row */
+.bento2-tile.i.miniContact .miniContactRow input,
+.bento2-tile.i.miniContact .miniContactRow button,
+.bento2-tile.i.miniContact .miniContactRow textarea{
+  -webkit-appearance: none;
+  appearance: none;
+  background-clip: padding-box;
+}
+
+/* Remove any focus glow/ring in this component (still clickable) */
+.bento2-tile.i.miniContact .miniContactRow *:focus,
+.bento2-tile.i.miniContact .miniContactRow *:focus-visible{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ---------- Mini Contact: make the stacked (mobile) dock look premium ---------- */
+/* When the dock stacks, don't wrap everything in one giant pill.
+   Instead: dock becomes transparent, and each control becomes its own pill. */
+@media (max-width: 520px){
+  .bento2-tile.i.miniContact .miniContactRow{
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    gap: 10px !important;
+  }
+
+  .bento2-tile.i.miniContact .miniContactField{
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .bento2-tile.i.miniContact .miniContactRow .miniContactInput{
+    height: 44px !important;
+    padding: 0 14px !important;
+    border-radius: 999px !important;
+    background: color-mix(in srgb, var(--surface) 78%, transparent) !important;
+    border: 1px solid color-mix(in srgb, var(--line) 85%, transparent) !important;
+  }
+
+  .bento2-tile.i.miniContact .miniContactRow .btn2.miniContactBtn{
+    height: 44px !important;
+    border-radius: 999px !important;
+    width: 100% !important;
+    justify-self: stretch !important;
+    background: color-mix(in srgb, var(--surface) 82%, transparent) !important;
+    border: 1px solid color-mix(in srgb, var(--line) 85%, transparent) !important;
+    box-shadow: 0 10px 26px rgba(0,0,0,.10) !important;
+  }
+
+  /* Keep textarea breathing room so the stacked controls never overlap content */
+  .bento2-tile.i.miniContact .miniContactTextarea{
+    padding-bottom: 54px !important; /* dock no longer overlaps */
+  }
+
+  .bento2-tile.i.miniContact .miniContactMeta{
+    bottom: 12px !important;
+  }
+}
+
+/* Ultra small (iPhone SE): slightly tighter */
+@media (max-width: 380px){
+  .bento2-tile.i.miniContact .miniContactRow .miniContactInput{ height: 42px !important; }
+  .bento2-tile.i.miniContact .miniContactRow .btn2.miniContactBtn{ height: 42px !important; }
+}
+
+/* ---------- Touch highlight cleanup (only for icon/social buttons if present) ---------- */
+.social-btn,
+.bento2-socials .social-btn,
+.bento2-tile.d .social-btn{
+  -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 520px){
+  .pModalOverlay{
+    padding-top: 1200px; /* iPhone SE etc */
+  }
+}
+/* =========================
+   Socials grid — fill the tile width elegantly
+   (3x2 layout, no blank sides)
+   Smaller tiles + bigger icons
+   ========================= */
+
+.bento2-socials-float{
+  width: 100%;
+  max-width: 480px;                 /* ↓ smaller overall cluster */
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  /* slightly tighter spacing */
+  gap: clamp(9px, 2.8vw, 14px);
+
+  justify-content: stretch;
+  align-content: start;
+}
+
+.social-btn{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+
+  /* slightly tighter rounding */
+  border-radius: clamp(12px, 2.2vw, 15px);
+
+  box-shadow: 0 10px 26px rgba(0,0,0,0.10);
+}
+
+/* Bigger icon inside */
+.social-ic{
+  width: clamp(22px, 4.2vw, 30px);
+  height: clamp(22px, 4.2vw, 30px);
+}
+
+/* If your icons are SVGs, this makes them match too */
+.social-btn svg{
+  width: clamp(22px, 4.2vw, 30px);
+  height: clamp(22px, 4.2vw, 30px);
+}
+
+/* Small phones: fill the tile width, keep it clean */
+@media (max-width: 520px){
+  .bento2-socials-float{
+    max-width: none;
+    gap: clamp(9px, 4.6vw, 14px);
+  }
+}
+
+/* Ultra small phones (iPhone SE): tighten spacing just a bit */
+@media (max-width: 380px){
+  .bento2-socials-float{
+    gap: 9px;
+  }
+}
+/* =========================
+   Socials (Grid D) — MOBILE/TABLET ONLY
+   Smaller tiles + bigger icons, fills width nicely
+   ========================= */
+
+/* tablets + phones */
+@media (max-width: 900px){
+  .bento2-socials-float{
+    width: 100%;
+    max-width: 480px;                 /* smaller cluster */
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: clamp(9px, 2.8vw, 14px);
+
+    justify-content: stretch;
+    align-content: start;
+  }
+
+  .social-btn{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+
+    border-radius: clamp(12px, 2.2vw, 15px);
+  }
+
+  /* bigger icon */
+  .social-ic{
+    width: clamp(22px, 4.2vw, 30px);
+    height: clamp(22px, 4.2vw, 30px);
+  }
+
+  /* if icons are SVGs */
+  .social-btn svg{
+    width: clamp(22px, 4.2vw, 30px);
+    height: clamp(22px, 4.2vw, 30px);
+  }
+}
+
+/* small phones */
+@media (max-width: 520px){
+  .bento2-socials-float{
+    max-width: none;                  /* fill tile width */
+    gap: clamp(9px, 4.6vw, 14px);
+  }
+}
+
+/* ultra-small phones (iPhone SE) */
+@media (max-width: 380px){
+  .bento2-socials-float{
+    gap: 9px;
+  }
+}
+/* Hide footer peek cat on small screens */
+@media (max-width: 520px){
+  .footerPeekCat{
+    display: none !important;
+  }
+}
+
+/* =========================================================
+   Global responsive hardening (all devices)
+   - prevents stray horizontal scroll
+   - makes modals + footer behave on small heights
+   ========================================================= */
+
+/* Media elements should never overflow their containers */
+img, svg, video, canvas{
+  max-width: 100%;
+  height: auto;
+}
+
+/* Remove iOS tap highlight + keep focus only when keyboard */
+a, button, input, textarea, select{
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------------------------
+   Projects Modal: small screens + short heights
+   --------------------------- */
+
+/* Allow the overlay to scroll on short viewports (prevents modal being "pushed" off-screen) */
+.pModalOverlay{
+  padding: 18px;
+  padding-bottom: max(18px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Keep a consistent feel but avoid fixed height issues */
+.pModalCard{
+  height: auto;
+  max-height: min(760px, 90svh);
+}
+
+/* If content exceeds max-height, scroll inside the main area (not the whole page) */
+.pModalMain{
+  overflow: auto;
+}
+
+@media (max-width: 560px){
+  .pModalCard{
+    width: 100%;
+    max-height: 92svh;
+    border-radius: 22px;
+  }
+  .pModalTop{ padding: 16px 16px 12px; }
+  .pModalMedia{ padding: 14px; }
+  .pModalSide{ padding: 14px; }
+}
+
+@media (max-height: 720px){
+  .pModalCard{ max-height: 92svh; }
+}
+
+/* ---------------------------
+   Footer Peek Cat
+   - Desktop: visible (peeks from bottom like your original)
+   - Tablet: slightly smaller
+   - Small phones: hidden
+   --------------------------- */
+
+/* Ensure footer can anchor the absolute cat */
+.footerFull{
+  position: relative;
+  overflow: hidden;
+}
+
+/* Base (desktop): show it */
+.footerPeekCat{
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  top: auto;
+
+  /* desktop sizing */
+  width: clamp(220px, 22vw, 420px);
+  height: auto;
+
+  /* how much it "peeks" (smaller % = more visible) */
+  transform: translateX(-50%) translateY(0%);
+
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+
+  opacity: .95;
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,.24));
+}
+
+:root:not(.dark) .footerPeekCat{
+  opacity: .92;
+  filter: drop-shadow(0 14px 28px rgba(77,68,61,.20));
+}
+
+/* Tablet + small laptop: slightly more peek so it doesn't dominate */
+@media (max-width: 880px){
+  .footerPeekCat{
+    width: clamp(200px, 34vw, 360px);
+    transform: translateX(-50%) translateY(28%);
+  }
+
+  /* Give the footer enough breathing room so content never feels cramped */
+  .footerInner{
+    padding-bottom: clamp(70px, 10vw, 110px);
+  }
+}
+
+/* Small phones: hide it (per your preference) */
+@media (max-width: 520px){
+  .footerPeekCat{ display: none !important; }
+}
+/* =========================================================
+   Social icons (Grid D) — clean 3x2 grid + aligned with Projects list
+   Paste at the VERY BOTTOM of app.css (so it overrides duplicates)
+   ========================================================= */
+
+.bento2-tile.d.socialsTile{
+  padding-top: 10px;
+}
+
+/* Grid: 3 columns, fills available width, aligned to left like Projects list */
+.bento2-socials-float{
+  width: 100%;
+  max-width: 260px;                 /* keeps it tidy on desktop */
+  margin-top: -1%;                        /* align left (not centered) */
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+
+  justify-content: start;
+  align-content: start;
+}
+
+/* Buttons: square tiles that fill the grid cells */
+.social-btn{
+  width: 95%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+  text-decoration: none;
+
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+}
+
+:root.dark .social-btn{
+  border-color: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  box-shadow: 0 14px 30px rgba(0,0,0,.30);
+}
+
+.social-btn:hover{
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  box-shadow: 0 14px 32px rgba(0,0,0,.16);
+}
+
+:root.dark .social-btn:hover{
+  background: rgba(255,255,255,.09);
+  box-shadow: 0 16px 36px rgba(0,0,0,.36);
+}
+
+/* Icon sizing */
+.social-ic,
+.social-btn svg{
+  width: 24px;
+  height: 24px;
+}
+
+/* Remove ugly tap highlight & keep keyboard focus accessible */
+.social-btn{ -webkit-tap-highlight-color: transparent; outline: none; }
+.social-btn:focus-visible{
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--text) 18%, transparent),
+    0 10px 24px rgba(0,0,0,.10);
+}
+
+/* Tablet + phones: let it expand wider */
+@media (max-width: 900px){
+  .bento2-socials-float{
+    max-width: none;
+    gap: clamp(10px, 2.6vw, 14px);
+  }
+  .social-ic,
+  .social-btn svg{
+    width: clamp(20px, 3.8vw, 26px);
+    height: clamp(20px, 3.8vw, 26px);
+  }
+}
+
+/* Ultra small (iPhone SE) */
+@media (max-width: 380px){
+  .bento2-socials-float{ gap: 9px; }
+  .social-btn{ border-radius: 12px; }
+}
+/* =========================================================
+   Social icons — ONLY bigger on small screens
+   Desktop/original stays exactly the same
+   ========================================================= */
+
+/* Tablet / phones: increase icon size */
+@media (max-width: 900px){
+  .social-ic,
+  .social-btn svg{
+    width: clamp(28px, 5.2vw, 36px);
+    height: clamp(28px, 5.2vw, 36px);
+  }
+}
+
+/* Very small phones (iPhone SE): a bit bigger, but controlled */
+@media (max-width: 380px){
+  .social-ic,
+  .social-btn svg{
+    width: 32px;
+    height: 32px;
+  }
+}
+/* =========================================================
+   Project Modal — mobile fixes ONLY (desktop unchanged)
+   هدف: make modal clean on small screens, no ugly blank space
+   ========================================================= */
+
+@media (max-width: 720px){
+
+  /* let the overlay scroll naturally on short screens */
+  .pModalOverlay{
+    padding: 12px;
+    padding-bottom: 12px; /* override the 100px bottom padding */
+    overflow: auto;
+    place-items: center;
+  }
+
+  /* modal card becomes "sheet-like" and uses screen height properly */
+  .pModalCard{
+    width: min(980px, calc(100vw - 16px));
+    height: auto; /* remove fixed 65vh behavior on phones */
+    max-height: calc(100dvh - 24px);
+    border-radius: 22px;
+  }
+
+  /* stack layout: media on top, details below */
+  .pModalMain{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: auto;
+  }
+
+  /* remove right divider, add bottom divider */
+  .pModalMedia{
+    border-right: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .pModalSide{
+    padding: 14px 14px 16px;
+    gap: 10px;
+  }
+
+  /* tighten header so it doesn’t feel huge */
+  .pModalTop{
+    padding: 14px 14px 12px;
+    gap: 10px;
+  }
+
+  .pModalTitle{
+    font-size: clamp(18px, 4.6vw, 22px);
+    line-height: 1.15;
+  }
+
+  /* frame + image area: less padding, better use of space */
+  .pModalFrame{
+    padding: 12px 12px 10px;
+    border-radius: 18px;
+    gap: 10px;
+  }
+
+  .pModalImg{
+    max-height: 46vh; /* prevents giant blank white blocks */
+  }
+
+  /* thumbnails: more adaptive sizing */
+  .pModalThumbs{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .pModalThumb img{
+    height: clamp(56px, 14vw, 76px);
+  }
+
+  /* nav pill: slightly tighter on mobile */
+  .pModalNav{
+    padding: 6px 10px;
+    gap: 8px;
+  }
+}
+
+/* very small phones (iPhone SE) */
+@media (max-width: 380px){
+  .pModalThumbs{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .pModalImg{
+    max-height: 42vh;
+  }
+}
+/* Move the modal card down a bit (mobile only) */
+@media (max-width: 720px){
+  .pModalCard{
+    margin-top: 1300px;   
+  }
+}

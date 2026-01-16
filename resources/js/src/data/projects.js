@@ -1,0 +1,40 @@
+export const projects = [
+  {
+    id: "bento",
+    title: "Black Pink Fan Page",
+    blurb: "A fan pages for BackPink.",
+    tags: ["HTML", "UI", "CSS"],
+    preview: "/image/projects/blackpink1.png",
+    shots: ["/image/projects/blackpink1.png", "/image/projects/blackpink2.png", "/image/projects/blackpink3.png", "/image/projects/blackpink4.png", "/image/projects/blackpink5.png", "/image/projects/blackpink6.png", "/image/projects/blackpink7.png", "/image/projects/blackpink8.png", "/image/projects/blackpink9.png", "/image/projects/blackpink10.png", "/image/projects/blackpink11.png", "/image/projects/blackpink12.png", "/image/projects/blackpink13.png", "/image/projects/blackpink14.png"],
+    links: {
+      live: "#",
+      github: "#",
+    },
+  },
+  {
+    id: "landing",
+    title: "Puhon POS",
+    blurb: "POS for Puhon By Verse.",
+    tags: ["C#"],
+    preview: "/image/projects/puhon1.png",
+    shots: ["/image/projects/puhon1.png", "/image/projects/puhon2.png", "/image/projects/puhon3.png", "/image/projects/puhon4.png", "/image/projects/puhon5.png", "/image/projects/puhon6.png", "/image/projects/puhon7.png", "/image/projects/puhon8.png", "/image/projects/puhon9.png", "/image/projects/puhon10.png"],
+    links: { live: "#", github: "#" },
+  },
+  {
+    id: "laravel",
+    title: "Black Ink",
+    blurb: "Black Ink Ecommerce Website",
+    tags: ["HTML", "UI", "CSS"],
+    preview: "/image/projects/blackInk1.jpg",
+    shots: ["/image/projects/blackInk1.jpg", "/image/projects/blackInk2.jpg","/image/projects/blackInk3.jpg","/image/projects/blackInk4.jpg","/image/projects/blackInk5.jpg","/image/projects/blackInk6.jpg","/image/projects/blackInk7.jpg","/image/projects/blackInk8.jpg","/image/projects/blackInk9.jpg"],
+    links: { live: "#", github: "#" },
+  },{
+    id: "One",
+    title: "One Health",
+    blurb: "Web-Based Immunization System",
+    tags: ["Laravel", "MySQL", "React JS"],
+    preview: "/image/projects/onehealth1.png",
+    shots: ["/image/projects/onehealth1.png","/image/projects/onehealth2.png","/image/projects/onehealth3.png","/image/projects/onehealth4.png","/image/projects/onehealth5.png","/image/projects/onehealth6.png","/image/projects/onehealth7.png","/image/projects/onehealth8.png","/image/projects/onehealth9.png","/image/projects/onehealth10.png","/image/projects/onehealth11.png","/image/projects/onehealth12.png","/image/projects/onehealth13.png","/image/projects/onehealth14.png","/image/projects/onehealth15.png","/image/projects/onehealth16.png"],
+    links: { live: "#", github: "#" },
+  },
+];
